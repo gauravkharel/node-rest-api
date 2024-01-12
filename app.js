@@ -1,65 +1,17 @@
 const express = require("express");
-const fs = require("fs");
-const PORT = 3000;
-const users = require("./MOCK_DATA.json");
+require("@prisma/client");
 const app = express();
-app.use(express.json())
+require("dotenv").config();
+const bodyParser = require("body-parser");
+const multer = require("multer");
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-app.listen(PORT, () => {
-  console.log("Server listening on PORT:", PORT);
-});
+// redirect to routes/index.js
+const route = require("./routes");
+app.use("/", route);
 
-app.get("/api/users", (req, res) => {
-  return res.json(users);
-});
-
-app.get("/users", (req, res) => {
-  const html = `
-        <ul>
-        ${users.map((user) => `<li>${user.first_name}</li>`).join()}
-        </ul>
-    `;
-  res.send(html);
-});
-
-//group the CRUD in a single route
-app
-  .route("/api/users/:id")
-  .get((req, res) => {
-    const id = Number(req.params.id);
-    const user = users.filter((user) => user.id === id);
-    return res.json(user);
-  })
-  .patch((req, res) => {
-    const id = Number(req.params.id);
-    const {first_name, last_name, email, gender, job_title} = req.body;
-    const userIndex = users.findIndex((user) => user.id === id);
-    users[userIndex] = Object.assign(users[userIndex], {
-        first_name: first_name || users[userIndex].first_name,
-        last_name: last_name || users[userIndex].last_name,
-        email: email || users[userIndex].email,
-        gender: gender || users[userIndex].gender,
-        job_title: job_title || users[userIndex].job_title,
-
-    })
-    fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, data) => {
-      return res.json({ status: "User is updated" });
-    });
-  })
-  .delete((req, res) => {
-    const id = Number(req.params.id);
-    const user = users.filter((user) => user.id !== id);
-    console.log(user);
-    fs.writeFile("./MOCK_DATA.json", JSON.stringify(user), (err, data) => {
-      return res.json({ status: "User is Deleted" });
-    });
-  });
-
-app.post("/api/users", (req, res) => {
-  // TODO: Create new user
-  const body = req.body;
-  users.push({ ...body, id: users.length + 1 });
-  fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, data) => {
-    return res.json({ status: "pending", id: users.length });
-  });
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+  console.log(`server is running on port ${port}`);
 });

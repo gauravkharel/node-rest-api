@@ -1,0 +1,10 @@
+{
+    "status": true,
+    "message": "User created successfully",
+    "data": {
+      "name": "Bibel Rama",
+      "email": "bibel@test.com",
+      "password": "$2a$08$9zaoGYEMlULagSNVgffDkuZaNYWfx2jBbOQXtKvsdgpF4AalTSxSa",
+      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7fSwiaWF0IjoxNzA1MDQzOTE3fQ.RdbiT1HBcpBnAVg67OaGjhS_IpOqpi6nXtkh4f9s7Qc"
+    }
+  }
